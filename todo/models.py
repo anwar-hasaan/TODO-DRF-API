@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    uid = models.UUIDField(editable=False, unique=True, null=True, blank=True)
+    uid = models.UUIDField(unique=True, null=True, blank=True, editable=False)
     email = models.EmailField(verbose_name='email', max_length=100, unique=True)
     fullname = models.CharField(verbose_name='full name', max_length=50)
     picture = models.ImageField(verbose_name='profile picture', upload_to='profile_pic/', null=True, blank=True)
@@ -49,3 +49,6 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    # def save(self, *args, **kwargs):
+    #     self.uid = str(uuid4())
+    #     return super().save(self, *args, **kwargs)

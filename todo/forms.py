@@ -1,5 +1,6 @@
 from django import forms
 from todo.models import User
+from django.contrib.auth import authenticate, login
 
 class UserRegiterForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -16,3 +17,6 @@ class UserRegiterForm(forms.ModelForm):
         elif len(password) < 8:
             raise forms.ValidationError('Password must contain at least 8 charecters!')
         return password
+class LoginForm(forms.Form):
+    email = forms.CharField(label='Email', widget=forms.EmailInput)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
