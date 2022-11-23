@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-    uid = models.UUIDField(unique=True, null=True, blank=True, editable=False)
+    uid = models.UUIDField(unique=True, null=True, blank=True, editable=True)
     email = models.EmailField(verbose_name='email', max_length=100, unique=True)
     fullname = models.CharField(verbose_name='full name', max_length=50)
     picture = models.ImageField(verbose_name='profile picture', upload_to='profile_pic/', null=True, blank=True)
@@ -52,3 +52,23 @@ class User(AbstractBaseUser):
     # def save(self, *args, **kwargs):
     #     self.uid = str(uuid4())
     #     return super().save(self, *args, **kwargs)
+
+STATUS = (
+    ('pending', 'pending'),
+    ('complete', 'complete'),
+    ('overdue', 'overdue')
+)
+class Todo(models.Model):
+    uid = models.UUIDField(unique=True, default=str(uuid4()), blank=True, editable=False)
+    user_id = models.CharField(max_length=5)
+    dev_ref = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.CharField(max_length=150)
+    description = models.TextField(null=True, blank=True)
+    status = models.CharField(choices=STATUS, default=STATUS[0], max_length=15)
+    due_date = models.DateTimeField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.task

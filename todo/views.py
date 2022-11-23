@@ -3,15 +3,26 @@ from todo.forms import UserRegiterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from todo.models import User
+from todo.models import User, Todo
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from todo.serializers import TodoSerializer
+
+@api_view(['POST'])
+def get_all_task(request):
+    dev_uid = request.data['dev_uid']
+    user_id = request.data['user_id']
+
+    dev = User.objects.get(uid=dev_uid)
+    
+    all_task = Todo.objects.filter(dev_ref=dev, user_id=user_id)
+    serializer = TodoSerializer(all_task, many=True)
+
+    return Response({'status': 200, 'data': serializer.data, 'message': 'all data'})   
 
 @login_required(login_url='/login')
 def home(request):
-    email = request.user.email
-    
-    token = User.objects.filter(uid='16551f46-35d0-4fb9-ad20-39cfbd66f988').first().is_admin
-
-    return render(request, 'base.html' ,{'uid': token})
+    return render(request, 'base.html' ,)
 
 def register(request):
     if request.method == 'POST':

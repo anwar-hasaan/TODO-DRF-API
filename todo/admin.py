@@ -1,5 +1,5 @@
 from django.contrib import admin
-from todo.models import User
+from todo.models import User, Todo
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class UserAdmin(BaseUserAdmin):
@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         ('User Credentials', {'fields': ('email', 'password',)}),
         ('Personal Info', {'fields': ('fullname', 'picture',)}),
-        ('Others', {'fields': ('is_active', 'is_admin',)}),
+        ('Others', {'fields': ('is_active', 'is_admin', 'uid',)}),
     )
     add_fieldsets = (
         (None, {
@@ -21,3 +21,4 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 admin.site.register(User, UserAdmin)
+admin.site.register(Todo)
