@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+<div class="container mt-3">
+    <h1>Profile Information</h1>    
+    <p>Get your uid below, copy and use it on your api project to access data:</p>
+    <dl>
+      <dt>Full Name</dt>
+        <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{request.user.fullname}}</dd>
+      <dt>Email</dt>
+        <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{request.user.email}}</dd>
+      <dt>Access token or UID</dt>
+        <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - <span id="copy-element">{{request.user.uid}}</span> <button id="copy-btn">copy</button></dd>
+    </dl>     
+</div>
+
+<script>
+    function copy_text(){
+        let copy_btn = document.getElementById('copy-btn');
+        copy_btn.addEventListener('click', function(){
+            let text = document.getElementById('copy-element');
+            let temp = document.createElement('input');
+            temp.value = text.textContent;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy', false)
+            temp.remove();
+
+            copy_btn.innerHTML = 'copied'
+        })
+    }
+    copy_text();
+</script>
+{% endblock content %}

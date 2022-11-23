@@ -7,22 +7,30 @@ from todo.models import User, Todo
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from todo.serializers import TodoSerializer
+from rest_framework import status
 
 @api_view(['POST'])
 def get_all_task(request):
-    dev_uid = request.data['dev_uid']
-    user_id = request.data['user_id']
-
-    dev = User.objects.get(uid=dev_uid)
-    
-    all_task = Todo.objects.filter(dev_ref=dev, user_id=user_id)
-    serializer = TodoSerializer(all_task, many=True)
-
-    return Response({'status': 200, 'data': serializer.data, 'message': 'all data'})   
+    try:
+        dev_uid = request.data['dev_uid']
+        user_id = request.data['user_id']
+        dev = User.objects.get(uid=dev_uid)
+        all_task = Todo.objects.filter(dev_ref=dev, user_id=user_id)
+        if all_task.first() is not None:
+            serializer = TodoSerializer(all_task, many=True)
+            # this is returing all task if credentials is ok
+            return Response({'message': 'your all tasks', 'tasks': serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'errors': 'No task available or invalid user'}, status=status.HTTP_404_NOT_FOUND)        
+    except Exception as error:
+        error = str(error)
+        if 'dev_uid' in error or 'user_id' in error:
+            error = error + ' not provided'
+        return Response({'errors': error}, status=status.HTTP_400_BAD_REQUEST)   
 
 @login_required(login_url='/login')
 def home(request):
-    return render(request, 'base.html' ,)
+    return render(request, 'auth/home.html')
 
 def register(request):
     if request.method == 'POST':

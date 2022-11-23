@@ -1,5 +1,5 @@
 from django.test import TestCase
-from todo.models import User
+from todo.models import User, Todo
 from datetime import datetime
 
 class Test_User(TestCase):
@@ -13,3 +13,6 @@ class Test_User(TestCase):
         user2 = User.objects.filter(joined_at__year=datetime.today().year).first()
         from uuid import uuid4
         self.assertIs(user2.fullname, 'Anwar')
+    def test_model_response(self):
+        all_task = Todo.objects.filter(user_id=1)
+        self.assertIs(all_task is not None, True)
