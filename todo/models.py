@@ -59,7 +59,7 @@ STATUS = (
     ('overdue', 'overdue')
 )
 class Todo(models.Model):
-    uid = models.UUIDField(unique=True, default=str(uuid4()), blank=True, editable=False)
+    uid = models.UUIDField(unique=True, default=uuid4, editable=True)
     user_id = models.CharField(max_length=5)
     dev_ref = models.ForeignKey(User, on_delete=models.CASCADE)
     task = models.CharField(max_length=150)
