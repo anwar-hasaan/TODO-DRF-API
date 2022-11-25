@@ -1,5 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from todo import views
+
+apis_urls = [
+    path('welcome', views.welcome),
+    path('all-task', views.get_all_task),
+    path('task-details', views.task_details),
+]
 
 app_name = 'todo'
 urlpatterns = [
@@ -7,7 +13,7 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('login', views.login_view, name='login'),
     path('logout', views.logout_view, name='logout'),
-    # api
-    path('api/all-task', views.get_all_task),
-    path('api/task-details', views.task_details),
+    path('api/', include(apis_urls)),
+    
 ]
+

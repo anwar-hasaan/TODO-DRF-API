@@ -9,6 +9,10 @@ from rest_framework.response import Response
 from todo.serializers import TodoSerializer
 from rest_framework import status
 
+@api_view(['GET'])
+def welcome(request):
+    return Response({'message': 'Welcome to this todo-api'})
+
 @api_view(['POST'])
 def get_all_task(request):
     try:
