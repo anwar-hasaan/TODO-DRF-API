@@ -11,26 +11,36 @@
         <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{request.user.fullname}}</dd>
       <dt>Email</dt>
         <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{request.user.email}}</dd>
-      <dt>Access token or UID</dt>
+      <dt>Access token or UID > <button id="refresh-btn">Refresh UID</button></dt>
         <dd> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - <span id="copy-element">{{request.user.uid}}</span> <button id="copy-btn">copy</button></dd>
     </dl>     
 </div>
 
 <script>
-    function copy_text(){
-        let copy_btn = document.getElementById('copy-btn');
-        copy_btn.addEventListener('click', function(){
-            let text = document.getElementById('copy-element');
-            let temp = document.createElement('input');
-            temp.value = text.textContent;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy', false)
-            temp.remove();
+      let copy_btn = document.getElementById('copy-btn');
+      copy_btn.addEventListener('click', function(){
+          let text = document.getElementById('copy-element');
+          let temp = document.createElement('input');
+          temp.value = text.textContent;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy', false)
+          temp.remove();
 
-            copy_btn.innerHTML = 'copied'
-        })
-    }
-    copy_text();
+          copy_btn.innerHTML = 'copied'
+      })
+
+    let refresh = document.getElementById('refresh-btn');
+    refresh.addEventListener('click', function(){
+      let uid = document.getElementById('copy-element');
+      let base_url = window.location.origin
+      url = base_url + "/resfresh-user-uid/" + uid.textContent
+      let is_refresh = prompt("If refresh uid then you will have to update the uid on your project request.\nDo you really wanna refresh\nType yes or y to refresh.")
+      let yes = is_refresh.toLowerCase()
+      if (yes == 'yes' || yes == 'y'){
+        location.href = url;
+      }
+      
+    })
 </script>
 {% endblock content %}
